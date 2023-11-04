@@ -1,0 +1,52 @@
+project_name: wikindexer
+
+builds:
+  - env:
+      - CGO_ENABLED=0
+      - GO111MODULE=on
+    goos:
+      - linux
+      - darwin
+    goarch:
+      - amd64
+      # - arm
+      - arm64
+
+checksum:
+  name_template: "checksums.txt"
+
+snapshot:
+  name_template: "{{ .Tag }}-next"
+
+brews:
+  - repository:
+      owner: pthomison
+      name: homebrew-tools
+
+    service: |
+      run opt_bin/"example-goreleaser-service"
+      log_path var/"log/example-goreleaser-service-stdout.log"
+      error_log_path var/"log/example-goreleaser-service-stderr.log"
+      working_dir var/"lib/example-goreleaser-service"
+
+    post_install: |
+      (var/"lib/example-goreleaser-service").mkpath
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - "^docs:"
+      - "^test:"
+
+before:
+  hooks:
+    - go mod tidy
+    - go fmt ./...
+# archives:
+#   - replacements:
+#       darwin: Darwin
+#       linux: Linux
+#       windows: Windows
+#       386: i386
+#       amd64: x86_64
