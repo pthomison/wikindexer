@@ -24,13 +24,13 @@ brews:
       name: homebrew-tools
 
     service: |
-      run opt_bin/"example-goreleaser-service"
-      log_path var/"log/example-goreleaser-service-stdout.log"
-      error_log_path var/"log/example-goreleaser-service-stderr.log"
-      working_dir var/"lib/example-goreleaser-service"
+      run opt_bin/"wikindexer"
+      log_path var/"log/wikindexer-stdout.log"
+      error_log_path var/"log/wikindexer-stderr.log"
+      working_dir var/"lib/wikindexer"
 
     post_install: |
-      (var/"lib/example-goreleaser-service").mkpath
+      (var/"lib/wikindexer").mkpath
 
 changelog:
   sort: asc
