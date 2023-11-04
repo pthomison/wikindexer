@@ -19,9 +19,9 @@ brews:
       name: homebrew-tools
 
     service: |
-      run opt_bin/"wikindexer"
-      log_path var/"log/wikindexer-stdout.log"
-      error_log_path var/"log/wikindexer-stderr.log"
+      run opt_bin/"wikindexer-collector"
+      log_path var/"log/wikindexer-collector-stdout.log"
+      error_log_path var/"log/wikindexer-collector-stderr.log"
       working_dir var/"lib/wikindexer"
 
     post_install: |
