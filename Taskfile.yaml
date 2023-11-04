@@ -6,7 +6,7 @@ tasks:
       - goreleaser build --snapshot --clean
 
   release:
-    envs:
+    env:
       GITHUB_TOKEN:
         sh: gh auth token
 
