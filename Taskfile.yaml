@@ -1,0 +1,14 @@
+version: "3"
+
+tasks:
+  snapshot:
+    cmds:
+      - goreleaser build --snapshot --clean
+
+  release:
+    envs:
+      GITHUB_TOKEN:
+        sh: gh auth token
+
+    cmds:
+      - goreleaser release --clean
