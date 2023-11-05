@@ -1,6 +1,8 @@
 package db
 
 import (
+	"fmt"
+
 	"github.com/jmoiron/sqlx"
 	"github.com/pthomison/errcheck"
 )
@@ -9,6 +11,10 @@ type Client struct {
 	DbLocation string
 
 	DB *sqlx.DB
+}
+
+type Migratable interface {
+	Schema() string
 }
 
 func NewClient(DbLocation string) *Client {
@@ -24,6 +30,8 @@ func NewClient(DbLocation string) *Client {
 	return c
 }
 
-func (c *Client) Migrate() {
-
+func (c *Client) Migrate(migrationStructs ...Migratable) {
+	for _, m := range migrationStructs {
+		fmt.Println(m.Schema())
+	}
 }

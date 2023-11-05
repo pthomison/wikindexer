@@ -2,11 +2,13 @@ package main
 
 import (
 	"context"
+	"fmt"
+	"time"
 
-	"github.com/hashicorp/go-retryablehttp"
-	"github.com/pthomison/errcheck"
 	"github.com/pthomison/wikindexer/internal/config"
+	"github.com/pthomison/wikindexer/internal/wiki"
 	"github.com/sirupsen/logrus"
+	"github.com/spf13/viper"
 	"gitlab.com/tozd/go/errors"
 	"gitlab.com/tozd/go/mediawiki"
 	"gitlab.com/tozd/go/x"
@@ -14,31 +16,26 @@ import (
 
 func init() {
 	config.ViperInit()
+	logrus.Info(viper.AllSettings())
 }
 
 func main() {
+	logrus.Info("Starting WikIndexer Reader")
+
 	ctx := context.TODO()
-	retryableClient := retryablehttp.NewClient()
+	wikiConfig := wiki.LoadWikiConfig(ctx)
+	wikiConfig.Progress = LogProgress
 
-	// cacheDirPath := viper.GetString("cache.directory")
-	// cacheFilePath := fmt.Sprintf("%v/%v", cacheDirPath, viper.GetString("cache.filename"))
-
-	// err := os.MkdirAll(cacheDirPath, 0755)
-	// errcheck.Check(err)
-
-	url, err := mediawiki.LatestWikipediaRun(ctx, retryableClient, "enwiki", 0)
-	errcheck.Check(err)
-
-	mediawiki.ProcessWikipediaDump(ctx, &mediawiki.ProcessDumpConfig{
-		URL:      url,
-		Path:     "./tmp",
-		Client:   retryableClient,
-		Progress: LogProgress,
-	}, func(ctx context.Context, a mediawiki.Article) errors.E {
+	mediawiki.ProcessWikipediaDump(ctx, wikiConfig, func(ctx context.Context, a mediawiki.Article) errors.E {
+		// logrus.Info(a.Name)
 		return nil
 	})
 }
 
 func LogProgress(ctx context.Context, p x.Progress) {
-	logrus.Info(p)
+	percentage := p.Percent()
+	remaingTime := time.Until(p.Estimated()).Truncate(time.Second).String()
+
+	logMsg := fmt.Sprintf("Read %3f%% Complete, Approximately %v remaining", percentage, remaingTime)
+	logrus.Info(logMsg)
 }
