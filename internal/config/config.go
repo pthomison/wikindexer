@@ -11,7 +11,7 @@ import (
 
 func ViperDefaults() {
 	viper.SetDefault("cache.directory", fmt.Sprintf("%v/.config/wikindexer", os.Getenv("HOME")))
-	viper.SetDefault("cache.filename", "config")
+	viper.SetDefault("cache.filename", "cache")
 	viper.SetDefault("cores", 4)
 }
 
