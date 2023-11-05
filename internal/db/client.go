@@ -13,10 +13,6 @@ type Client struct {
 	DB *sqlx.DB
 }
 
-type Migratable interface {
-	Schema() string
-}
-
 func NewClient(DbLocation string) *Client {
 	c := &Client{
 		DbLocation: DbLocation,
@@ -28,10 +24,4 @@ func NewClient(DbLocation string) *Client {
 	c.DB = db
 
 	return c
-}
-
-func (c *Client) Migrate(migrationStructs ...Migratable) {
-	for _, m := range migrationStructs {
-		c.DB.MustExec(m.Schema())
-	}
 }
