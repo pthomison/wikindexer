@@ -18,11 +18,14 @@ import (
 
 func init() {
 	config.ViperInit()
-	viper.Set("cache.directory", ".")
-	viper.Set("cache.filename", "temp")
+	logrus.Info(viper.AllSettings())
+	// viper.Set("cache.directory", ".")
+	// viper.Set("cache.filename", "temp")
 }
 
 func main() {
+	logrus.Info("Starting WikIndexer Collector")
+
 	ctx := context.TODO()
 	retryableClient := retryablehttp.NewClient()
 	retryableClient.RetryMax = 15

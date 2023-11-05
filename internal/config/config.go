@@ -1,13 +1,16 @@
 package config
 
 import (
+	"fmt"
+	"os"
+
 	"github.com/pthomison/errcheck"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 )
 
 func ViperDefaults() {
-	viper.SetDefault("cache.directory", "$HOME/.config/wikindexer")
+	viper.SetDefault("cache.directory", fmt.Sprintf("%v/.config/wikindexer", os.Getenv("HOME")))
 	viper.SetDefault("cache.filename", "config")
 	viper.SetDefault("cores", 4)
 }
