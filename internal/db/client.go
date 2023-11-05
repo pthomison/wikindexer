@@ -1,7 +1,7 @@
 package db
 
 import (
-	"fmt"
+	_ "github.com/glebarez/go-sqlite"
 
 	"github.com/jmoiron/sqlx"
 	"github.com/pthomison/errcheck"
@@ -32,6 +32,6 @@ func NewClient(DbLocation string) *Client {
 
 func (c *Client) Migrate(migrationStructs ...Migratable) {
 	for _, m := range migrationStructs {
-		fmt.Println(m.Schema())
+		c.DB.MustExec(m.Schema())
 	}
 }
